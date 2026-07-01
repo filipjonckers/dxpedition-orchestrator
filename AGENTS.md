@@ -3,6 +3,8 @@
 
 ## Purpose
 
+Orchestration of DXpedition notebooks for the RockAll DXpedition team.
+
 This project automatically installs and configures Windows (Tiny11) laptops from scratch.
 
 Target:
@@ -11,6 +13,8 @@ Target:
 - Performance-first Windows configuration
 - No manual post-install steps except boot + login
 
+---
+
 ## Core Rules
 
 ### 1. Simplicity first
@@ -18,11 +22,15 @@ Keep everything simple.
 No complex frameworks.
 No enterprise tooling.
 
+---
+
 ### 2. Single branch only
 Only use:
 - main
 
 No feature branches, no CI/CD.
+
+---
 
 ### 3. No external orchestration tools
 Do NOT use:
@@ -34,8 +42,12 @@ Do NOT use:
 
 Everything must run on Windows via PowerShell.
 
+---
+
 ### 4. Git is the source of truth
 All configuration, scripts and installers are stored in this repository.
+
+---
 
 ### 5. Automation flow
 
@@ -47,6 +59,8 @@ Target flow:
 4. Git repository is cloned
 5. Deploy.ps1 runs
 6. System is fully configured
+
+---
 
 ### 6. Architecture rules
 
@@ -61,6 +75,8 @@ Keep structure flat and readable:
 
 No deeper abstraction layers.
 
+---
+
 ### 7. PowerShell rules
 
 - No complex module architecture required
@@ -68,6 +84,8 @@ No deeper abstraction layers.
 - Use functions only when needed
 - Always log actions
 - Scripts must be readable for non-experts
+
+---
 
 ### 8. Configuration
 
@@ -79,16 +97,22 @@ Example:
 - installed software
 - desktop settings
 
+---
+
 ### 9. Performance priority
 
 Do not install or enable anything that impacts performance negatively.
 
 Windows must remain lightweight.
 
+---
+
 ### 10. Safety rule
 
 Do not implement Windows activation bypass or license circumvention.
 Only support legitimate activation methods (OEM / digital license).
+
+---
 
 ## Success criteria
 
