@@ -1,57 +1,326 @@
-# PROJECT
+# PROJECT.md
 
-## Goal
+# DXpedition Orchestrator
 
-Build a fully automated Windows deployment system for Tiny11 laptops.
+## Project Overview
 
----
+DXpedition Orchestrator is a lightweight deployment toolkit for automatically installing, configuring and maintaining Windows Tiny11 laptops for DXpedition usage.
 
-## Requirements
+The project is intended for a medium DXpedition environment consisting of approximately eight laptops.
 
-- Automatic installation of Windows
-- Automatic user creation (admin)
-- Automatic system configuration
-- Automatic software installation
-- Automatic keyboard + display setup
-- Automatic driver handling
-- Git-based configuration system
+The primary objective is to minimize manual work while keeping the solution simple, maintainable and reliable.
+
+The project must remain Windows-native and should not require Linux or enterprise deployment infrastructure.
 
 ---
 
-## Environment constraints
+## Project Goals
 
-- No Linux required
-- No Ansible
-- No external orchestration systems
-- Only Windows PowerShell allowed
-- Internet available via DHCP/WiFi
+The deployment process should:
+
+- Install Windows automatically.
+- Configure Windows automatically.
+- Install required software automatically.
+- Copy required configuration files automatically.
+- Apply Windows settings automatically.
+- Install drivers when available.
+- Produce a laptop that is immediately ready for use.
+
+The deployment should require as little user interaction as possible.
 
 ---
 
-## Software scope
+## Scope
 
-Initial applications:
+The project includes:
+
+- Tiny11 installation
+- Windows configuration
+- Software installation
+- Driver installation
+- Configuration management
+- Restore functionality
+- Logging
+- Documentation
+
+The project does not include:
+
+- Enterprise deployment
+- Domain management
+- Active Directory
+- Microsoft Intune
+- MDT
+- SCCM
+- Linux infrastructure
+
+---
+
+## Target Environment
+
+Hardware:
+
+- Approximately eight notebooks.
+- Notebook manufacturer is unknown.
+- Internet connection is available.
+- Network configuration uses DHCP.
+- Wireless networking may be used.
+
+---
+
+## Deployment Workflow
+
+The complete deployment process consists of the following stages:
+
+1. Boot from Tiny11 installation media.
+2. Windows installation starts automatically.
+3. Windows creates the predefined administrator account.
+4. Automatic logon occurs.
+5. Bootstrap script executes.
+6. Git is installed if necessary.
+7. Repository is cloned or updated.
+8. Deployment script executes.
+9. Windows configuration is applied.
+10. Software is installed.
+11. Drivers are installed if available.
+12. Configuration files are copied.
+13. Deployment finishes.
+
+---
+
+## Functional Requirements
+
+The deployment must support the following functionality.
+
+### Windows Installation
+
+- Automatically install Tiny11.
+- Automatically partition the system drive.
+- Automatically create the local administrator account.
+- Automatically configure automatic logon.
+- No Microsoft account should be required.
+
+---
+
+### Bootstrap
+
+- Prepare Windows for deployment.
+- Install Git if required.
+- Clone or update the repository.
+- Start the deployment process.
+- Create deployment logs.
+
+---
+
+### Configuration
+
+Configuration should be stored outside the scripts whenever possible.
+
+Configuration includes:
+
+- computer name
+- user information
+- display settings
+- keyboard settings
+- software selection
+- driver behavior
+
+---
+
+### Windows Configuration
+
+The deployment must support configuring Windows settings.
+
+Initially this includes:
+
+- Display scaling: 150%
+- Desktop background: Solid black RGB: #000000
+- Wallpaper: Disabled
+- Keyboard: Belgian AZERTY
+- Secondary keyboard: US International
+- Language selector visible in the taskbar.
+- Explorer settings should be configurable.
+
+Additional settings may be added later.
+
+---
+
+### Software
+
+Initially the deployment should support:
 
 - N1MM Logger+
 - WSJT-X
+- MSHV
 - DXLog
+- N1MM
+
+Future software should be easy to add without redesigning the project.
 
 ---
 
-## Configuration system
+### Drivers
 
-All configuration stored in YAML files:
-- keyboard layout
-- display scaling
-- desktop settings
-- installed software
+Driver installation must be optional.
+
+Preferred installation order:
+
+1. Windows Update
+2. Repository driver packages
+3. No installation if nothing is available
+
+The deployment should not fail because drivers are unavailable.
 
 ---
 
-## Deployment requirement
+### File Management
 
-System must be fully usable after:
+Configuration files should be copied automatically.
 
-- Windows install
-- Bootstrap execution
-- One deploy script run
+Examples include:
+
+- application configuration
+- templates
+- radio configuration
+- desktop shortcuts
+- future project files
+
+The exact file set should be configurable.
+
+---
+
+### Logging
+
+The deployment should generate one deployment log.
+
+The log should contain:
+
+- date
+- time
+- executed script
+- performed action
+- result
+- errors
+
+The log should simplify troubleshooting.
+
+---
+
+### Restore
+
+A restore operation should return the notebook to the standard project configuration.
+
+Restore should include:
+
+- Windows settings
+- Registry settings
+- Configuration files
+- Software verification
+- Missing software installation
+
+Restore should not require reinstalling Windows.
+
+---
+
+## Non Functional Requirements
+
+The project must remain:
+
+- Simple
+- Readable
+- Reliable
+- Maintainable
+- Repeatable
+- Fast
+- Easy to modify
+- Easy to troubleshoot
+
+---
+
+## Performance Requirements
+
+- Performance has priority.
+- The deployment should not introduce unnecessary software.
+- The deployment should not enable unnecessary Windows components.
+- The deployment should keep Tiny11 lightweight.
+
+---
+
+## Maintainability
+
+- Future modifications should normally require changing configuration files rather than PowerShell scripts.
+- Adding software should be straightforward.
+- Updating software should be straightforward.
+- Changing Windows settings should be straightforward.
+
+---
+
+## Error Handling
+
+- Deployment should continue whenever possible.
+- Critical failures should stop deployment.
+- Optional failures should be logged and skipped.
+- Errors should always be written to the deployment log.
+
+---
+
+## Security
+
+- The project uses a local administrator account.
+- No Microsoft account is required.
+- Passwords should be configurable.
+- The project must never implement or document methods to bypass Windows licensing or activation.
+- Only legitimate Windows activation methods are supported.
+
+---
+
+## Documentation
+
+Every important component must be documented.
+
+Documentation should focus on:
+
+- purpose
+- configuration
+- usage
+- troubleshooting
+
+Future maintenance should not depend on remembering implementation details.
+
+---
+
+## Success Criteria
+
+The project is considered complete when a new notebook can be prepared using the following workflow:
+
+1. Create Tiny11 installation USB.
+2. Boot the notebook.
+3. Wait for automatic Windows installation.
+4. Wait for deployment completion.
+5. Verify that:
+   1. Windows is configured.
+   2. Software is installed.
+   3. Drivers are installed when available.
+   4. Configuration files are copied.
+6. The notebook is immediately ready for use.
+
+---
+
+## Future Expansion
+
+Future improvements may include:
+
+- Additional software.
+- Additional Windows settings.
+- Additional configuration files.
+- Support for additional notebook models.
+- Additional restore options.
+- These additions should not require redesigning the project architecture.
+
+---
+
+## Project Philosophy
+
+- Expedition Orchestrator is intentionally simple.
+- The project is not intended to become a general-purpose deployment framework.
+- The primary objective is to automate repetitive work while remaining easy to understand and easy to maintain.
+- Whenever multiple solutions exist, the simplest solution that satisfies the requirements should be preferred.
