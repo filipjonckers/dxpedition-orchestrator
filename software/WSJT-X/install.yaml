@@ -1,0 +1,5 @@
+name: "WSJT-X"
+installer: "wsjtx-installer.exe"
+arguments: "/S"
+url: ""
+expected_path: "C:\\Program Files\\WSJT-X"

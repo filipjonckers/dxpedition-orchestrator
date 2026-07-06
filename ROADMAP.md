@@ -152,13 +152,13 @@ Goal: install required applications.
 
 Tasks:
 
-- Implement install-software.ps1
-- Add support for YAML-based software list
-- Install initial applications:
-  - N1MM Logger+
-  - MSHV
-  - WSJT-X
-  - DXLog
+[x] Implement install-software.ps1
+[x] Add support for YAML-based software list
+[x] Install initial applications:
+    - N1MM Logger+
+    - MSHV
+    - WSJT-X
+    - DXLog
 
 Result:
 

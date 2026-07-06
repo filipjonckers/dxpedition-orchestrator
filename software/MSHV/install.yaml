@@ -1,0 +1,5 @@
+name: "MSHV"
+installer: "MSHV_Setup.exe"
+arguments: "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-"
+url: ""
+expected_path: "C:\\Program Files (x86)\\MSHV"
