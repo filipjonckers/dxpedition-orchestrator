@@ -1,0 +1,10 @@
+hostname: DX-LAP-01
+username: dxpedition
+password: dxp3dition!
+keyboard_layout: "0813:00000813"
+secondary_keyboard: "0409:00000409"
+display_scaling: 150
+desktop_background: "#000000"
+wallpaper_disabled: true
+timezone: Romance Standard Time
+driver_mode: windows_update
