@@ -172,9 +172,9 @@ Goal: copy configuration files.
 
 Tasks:
 
-- Implement copy-files.ps1
-- Map files/ folder to system paths
-- Support YAML-based file mapping
+[x] Implement copy-files.ps1
+[x] Map files/ folder to system paths
+[x] Support YAML-based file mapping
 
 Result:
 

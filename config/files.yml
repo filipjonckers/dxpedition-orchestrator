@@ -1,1 +1,9 @@
 files:
+  # Each entry uses pipe format: source_path | destination_path
+  # source_path is relative to files/ directory
+  # destination_path is the full target path on the system
+  #
+  # Examples:
+  # - "config/N1MM/UserInterface.ini | C:\Users\dxpedition\AppData\Local\N1MM Logger+\UserInterface.ini"
+  # - "config/WSJT-X/wsjtx.ini | C:\Users\dxpedition\AppData\Local\WSJT-X\wsjtx.ini"
+  # - "desktop/Readme.txt | C:\Users\Public\Desktop\Readme.txt"

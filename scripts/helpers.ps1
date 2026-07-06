@@ -38,6 +38,9 @@ function Read-Yaml {
 
         if ($line -match "^\s*-\s+(.+)$") {
             $value = $matches[1].Trim()
+            if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+                $value = $matches[1]
+            }
             if ($currentKey -and $currentList -ne $null) {
                 $currentList += $value
             }
