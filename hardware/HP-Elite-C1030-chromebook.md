@@ -8,27 +8,6 @@ Installing Windows—even a stripped-down version like Tiny11—on an HP Elite c
 - ***Audio Drivers:*** While most things (Wi-Fi, Bluetooth, Touchpad) will work with custom drivers, Intel Comet Lake audio (speakers/headphone jack) requires custom SOF/AVS drivers developed by the Chrultrabook project. These specific audio drivers currently cost ~$10 via CoolStar's Patreon/Portal. Bluetooth audio and USB audio will work for free.
 - ***Voided Warranty:*** Opening your device and flashing firmware will void your warranty.
 
-## Create the Tiny11 Installation USB
-
-You will need a second Windows PC or Mac and an 8GB+ USB flash drive to create the installation media.
-
-### Download Tiny11
-
-Go to the [official Internet Archive page by NTDEV](https://archive.org/search?tab=all&query=NTDEV+tiny11&sort=-date&and%5B%5D=subject%3A%22tiny+11%22) (the creator of Tiny11) and download the latest version of Tiny11 on [Archive.org](https://archive.org).
-
-Download the Windows 11 Pro .iso image file.
-
-### Download Rufus
-
-Go to [rufus.ie](https://rufus.ie) and download the latest version.
-
-### Flash the USB
-
-1. Open Rufus and select your USB drive.
-2. Under "Boot selection", select the Tiny11 .iso you downloaded.
-3. Ensure "Partition scheme" is set to GPT and "Target system" is set to UEFI (non CSM).
-4. Click START. (If Rufus prompts you to remove Windows 11 hardware requirements like TPM/Secure Boot, make sure those boxes are checked).
-
 ## Enable Developer Mode & Disable Write Protect (WP)
 
 Your HP Elite c1030 uses a CR50 security chip. To install custom firmware, you must bypass the hardware write protection. The easiest way for this model is the "Battery Disconnect" method.
@@ -87,6 +66,8 @@ Standard Windows updates will not fix your touchpad or audio. You must install d
 5. Restart your device.
 
 For Audio: As mentioned, Intel Comet Lake onboard audio requires the custom SOF/AVS driver package. You will need to visit the link on CoolStar's site, pay the $10 Patreon pledge to access the driver portal, and download the Comet Lake audio package. Alternatively, use Bluetooth headphones or a USB-C audio dongle, which will work natively via Windows.
+
+**Decision:** We will not use commercial drivers for this project.  We will use Bluetooth headphones or a USB-C audio dongle.
 
 ## Configuring the Top Row (Media vs. F-Keys)
 

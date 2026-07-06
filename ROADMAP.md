@@ -42,6 +42,7 @@ Tasks:
 [x] Add ROADMAP.md
 [x] Add README.md
 [x] Add .gitignore
+[x] Add hardware specific notes
 
 Result:
 
@@ -55,7 +56,7 @@ Goal: fully automatic Windows installation.
 
 Tasks:
 
-- Write how to create the Tiny11 USB installer in boot.md
+- Write how to adapt the Tiny11 USB installer in boot.md
 - Configure Tiny11 USB installer
 - Add Autounattend.xml
 - Enable automatic partitioning

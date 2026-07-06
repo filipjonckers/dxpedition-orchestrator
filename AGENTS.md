@@ -65,11 +65,14 @@ Only use:
 
 ## Git Rules
 
-- Only use the `main` branch
-- No feature branches
-- No release branches
+- Only work in the current branch
+- No new feature branches
+- No new release branches
 - No Git workflows
 - Repository is single source of truth
+
+**important**
+the Git repository shall not contain installers.
 
 ---
 
@@ -257,6 +260,7 @@ Software must be:
 - optional
 - explicitly enabled via configuration
 - automatically installed without manual intervention (unattended installation)
+- installers shall be downloaded directly from the internet or copied from the USB flash drive into the corresponding directory in `software/`
 
 Initial supported software:
 

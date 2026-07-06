@@ -33,13 +33,17 @@ After running this system, a laptop will:
 
 ## High-level flow
 
-1. Boot from Tiny11 USB
-2. Windows installs automatically
-3. Bootstrap runs on first boot
-4. Git is installed
-5. Repository is cloned or updated
-6. Deploy script runs
-7. System is fully configured
+1. Tiny11 USB flash drive is prepared
+2. Repository is cloned on the USB flash drive
+3. Optionally install packages - executables can be added to the USB flash drive
+4. Boot from Tiny11 USB
+5. Windows installs automatically
+6. Bootstrap runs on first boot
+7. Git is installed
+8. Repository is cloned for later updates or restores
+9. copy installers from USB flash drive into `software/` directory
+10. Deploy script runs
+11. System is fully configured
 
 ---
 
@@ -62,11 +66,22 @@ install/        → Windows installation files (Autounattend, Bootstrap)
 scripts/        → All deployment logic (PowerShell)
 config/         → YAML configuration files
 software/       → Software definitions and installers
+hardware/       → Hardware specific notes, how to prepare specific hardware
 drivers/        → Optional driver packages
 files/          → Files copied to the system
 docs/           → Technical documentation
 logs/           → Deployment logs
 ```
+
+---
+
+## Hardware
+
+The hardware directory only contains notes concerning preparing different hardware platforms.
+
+The preparation of the hardware is out of scope of this project and shall be concidered as done.
+
+Exception is the installation of hardware specific drivers which is part of the drivers phase.  Selection of hardware type can be part of a selection menu on initial start of the installation scripts which shall then be saved as part of the configuration.
 
 ---
 
