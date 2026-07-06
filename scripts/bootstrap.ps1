@@ -24,13 +24,14 @@ $gitAvailable = Get-Command git -ErrorAction SilentlyContinue
 if (-not $gitAvailable) {
     Write-Log "Git not found, attempting installation" "WARN"
 
-    $gitInstaller = "$RepoPath\software\Git\Git-2.47.0-64-bit.exe"
-    if (Test-Path $gitInstaller) {
-        Write-Log "Installing Git from $gitInstaller"
-        Start-Process -FilePath $gitInstaller -ArgumentList "/VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /COMPONENTS='ext,ext\shellhere,ext\githere,gitlfs,assoc' /LOG=$LogDir\git-install.log" -Wait -NoNewWindow
+    $gitInstallerPath = "$RepoPath\software\Git"
+    $gitInstaller = Get-ChildItem -Path $gitInstallerPath -Filter "*.exe" | Select-Object -First 1
+    if ($gitInstaller) {
+        Write-Log "Installing Git from $($gitInstaller.FullName)"
+        Start-Process -FilePath $gitInstaller.FullName -ArgumentList "/VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /COMPONENTS='ext,ext\shellhere,ext\githere,gitlfs,assoc' /LOG=$LogDir\git-install.log" -Wait -NoNewWindow
         Write-Log "Git installation completed"
     } else {
-        Write-Log "Local Git installer not found at $gitInstaller" "WARN"
+        Write-Log "Local Git installer not found in $gitInstallerPath" "WARN"
         Write-Log "Attempting Git install via winget"
         $wingetResult = winget install --id Git.Git -e --source winget --accept-source-agreements --accept-package-agreements 2>&1
         Write-Log "winget result: $wingetResult"

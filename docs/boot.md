@@ -54,8 +54,8 @@ Each installer must be placed in its corresponding package directory.
 Example:
 
 ```
-software\N1MM-Logger-plus\N1MMLoggerPlusSetup.exe
-software\WSJT-X\wsjtx-2.6.1-win64.exe
+software\N1MM-Logger-plus\N1MMLoggerPlus.exe
+software\WSJT-X\wsjtx-installer.exe
 ```
 
 ## Step 5: Boot and Install

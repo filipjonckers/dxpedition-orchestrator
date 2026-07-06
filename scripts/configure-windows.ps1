@@ -13,6 +13,28 @@ $displayScaling = if ($config.ContainsKey("display_scaling")) { $config["display
 $keyboardLayout = if ($config.ContainsKey("keyboard_layout")) { $config["keyboard_layout"] } else { "0813:00000813" }
 $secondaryKeyboard = if ($config.ContainsKey("secondary_keyboard")) { $config["secondary_keyboard"] } else { "0409:00000409" }
 $desktopBackground = if ($config.ContainsKey("desktop_background")) { $config["desktop_background"] } else { "#000000" }
+$hostname = if ($config.ContainsKey("hostname")) { $config["hostname"] } else { "" }
+$timezone = if ($config.ContainsKey("timezone")) { $config["timezone"] } else { "" }
+
+if ($hostname -ne "") {
+    Write-Log "Setting computer name to $hostname"
+    try {
+        Rename-Computer -NewName $hostname -Force
+        Write-Log "Computer name set to $hostname (applies after reboot)"
+    } catch {
+        Write-Log "Failed to set computer name: $($_.Exception.Message)" "WARN"
+    }
+}
+
+if ($timezone -ne "") {
+    Write-Log "Setting timezone to $timezone"
+    try {
+        Set-TimeZone -Name $timezone
+        Write-Log "Timezone set to $timezone"
+    } catch {
+        Write-Log "Failed to set timezone: $($_.Exception.Message)" "WARN"
+    }
+}
 
 Write-Log "Setting display scaling to $displayScaling%"
 

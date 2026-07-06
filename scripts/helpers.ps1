@@ -1,4 +1,4 @@
-$Global:LogFile = if (Test-Path "C:\dxpedition-orchestrator\logs\deploy.log") { "C:\dxpedition-orchestrator\logs\deploy.log" } else { "C:\dxpedition-orchestrator\logs\deploy.log" }
+$Global:LogFile = "C:\dxpedition-orchestrator\logs\deploy.log"
 
 function Write-Log {
     param(

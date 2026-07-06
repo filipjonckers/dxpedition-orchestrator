@@ -92,7 +92,7 @@
             <ProductKey></ProductKey>
             <RegisteredOrganization>DXpedition</RegisteredOrganization>
             <RegisteredOwner>DXpedition</RegisteredOwner>
-            <TimeZone>Romance Standard Time</TimeZone>
+            <TimeZone>UTC</TimeZone>
         </component>
         <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
             <RunSynchronous>
@@ -103,7 +103,7 @@
                 </RunSynchronousCommand>
                 <RunSynchronousCommand wcm:action="add">
                     <Order>2</Order>
-                    <Path>powershell -Command "$usb = Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root 'Autounattend.xml') } | Select-Object -First 1; if ($usb) { Copy-Item (Join-Path $usb.Root 'dxpedition-orchestrator') 'C:\dxpedition-orchestrator' -Recurse -Force; Write-Output 'Repository copied from USB to C:\dxpedition-orchestrator' } else { Write-Output 'USB drive not found, repository copy skipped' }"</Path>
+                    <Path>powershell -Command "$usb = Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root 'autounattend.xml') } | Select-Object -First 1; if ($usb) { Copy-Item (Join-Path $usb.Root 'dxpedition-orchestrator') 'C:\dxpedition-orchestrator' -Recurse -Force; Write-Output 'Repository copied from USB to C:\dxpedition-orchestrator' } else { Write-Output 'USB drive not found, repository copy skipped' }"</Path>
                     <Description>Copy repository from USB to local disk</Description>
                 </RunSynchronousCommand>
             </RunSynchronous>

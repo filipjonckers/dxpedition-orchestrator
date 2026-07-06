@@ -78,7 +78,11 @@ switch ($driverMode) {
                     foreach ($line in $result) {
                         Write-Log "pnputil: $line"
                     }
-                    Write-Log "Local driver installation completed"
+                    if ($LASTEXITCODE -eq 0) {
+                        Write-Log "Local driver installation completed"
+                    } else {
+                        Write-Log "pnputil finished with exit code $LASTEXITCODE" "WARN"
+                    }
                 } catch {
                     Write-Log "Local driver installation failed: $($_.Exception.Message)" "WARN"
                 }
