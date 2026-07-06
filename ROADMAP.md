@@ -188,11 +188,11 @@ Goal: allow system reset without reinstalling Windows.
 
 Tasks:
 
-- Implement restore.ps1
-- Reset Windows settings
-- Reapply configuration
-- Reinstall missing software
-- Restore files
+[x] Implement restore.ps1
+[x] Reset Windows settings
+[x] Reapply configuration
+[x] Reinstall missing software
+[x] Restore files
 
 Result:
 
