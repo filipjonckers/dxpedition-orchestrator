@@ -101,8 +101,11 @@ Keep structure flat and readable:
 - scripts/ → all PowerShell logic
 - config/ → YAML configuration
 - software/ → installers or install logic
+- hardware/ → hardware preparation notes
 - drivers/ → driver packages
+- files/ → files copied to the system
 - docs/ → documentation
+- logs/ → deployment logs
 
 No deeper abstraction layers.
 
@@ -268,7 +271,6 @@ Initial supported software:
 - WSJT-X
 - MSHV
 - DXLog
-- N1MM
 
 Adding new software must NOT require redesign.
 

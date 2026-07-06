@@ -1,32 +1,90 @@
-# USB Boot and Unattended Installation Preparation
+# Boot from Tiny11 USB
 
-This document explains how to prepare the Tiny11 Windows installation USB drive and configure it to run the automated installation and orchestrator.
+## Purpose
 
-## 1. Create the Base Tiny11 USB Drive
+Guide for preparing a Tiny11 USB flash drive that installs Windows automatically using the answer file from this repository.
 
-First, create a basic bootable USB drive containing the Tiny11 installation files.
-Follow the instructions in [hardware/usb-drive-tiny11.md](../hardware/usb-drive-tiny11.md) to download Tiny11 and flash the USB drive using Rufus.
+## Requirements
 
-## 2. Copy the Orchestrator Project Files
+- Tiny11 ISO image (download from the official source)
+- USB flash drive (8 GB or larger)
+- Windows PC with Rufus (or similar tool)
+- This repository
 
-The unattended installation script is configured to look for the deployment repository directly on the USB drive.
+## Step 1: Prepare Tiny11 USB
 
-1. Ensure the USB drive is plugged into your PC.
-2. Clone or copy this entire repository to the **root** of the USB drive.
-3. The directory structure on your USB drive should look like this:
+Use Rufus to write the Tiny11 ISO to a USB flash drive:
 
-   ```text
-   USB_DRIVE_ROOT/
-   ├── Autounattend.xml      <-- Place a copy here (see Step 3)
-   ├── install/
-   │   ├── Autounattend.xml  <-- Part of this repository
-   │   └── bootstrap.ps1     <-- Part of this repository (Phase 3)
-   ├── scripts/
-   ├── config/
-   ├── software/
-   ├── hardware/
-   └── README.md
-4. Place Autounattend.xml on the USB Root
+1. Open Rufus
+2. Select the USB drive
+3. Click SELECT and choose the Tiny11 ISO
+4. Keep default settings
+5. Click START
+6. Wait until the process completes
 
-For Windows Setup to detect the unattended installation configuration, Autounattend.xml must be located at the root of the USB drive.
-Copy the Autounattend.xml file from install/Autounattend.xml in your repository directly to the root of the USB drive (e.g., E:\Autounattend.xml).
+## Step 2: Copy Autounattend.xml
+
+The answer file automates the entire Windows installation.
+
+1. Open the USB flash drive after Rufus finishes
+2. Copy `install/Autounattend.xml` from this repository to the root of the USB flash drive
+3. Rename it to `autounattend.xml` (lowercase) on the USB drive
+
+The file must be at the root of the USB drive.
+
+## Step 3: Copy Repository
+
+1. Clone the repository to the USB flash drive:
+
+   ```powershell
+   git clone <repository-url> X:\dxpedition-orchestrator
+   ```
+
+2. Replace X: with the actual drive letter of your USB flash drive
+
+## Step 4: Copy Installers (Optional)
+
+If internet access will not be available during deployment:
+
+1. Download required software installers on the preparation PC
+2. Copy them into `X:\dxpedition-orchestrator\software\<package>\` on the USB drive
+
+Each installer must be placed in its corresponding package directory.
+
+Example:
+
+```
+software\N1MM-Logger-plus\N1MMLoggerPlusSetup.exe
+software\WSJT-X\wsjtx-2.6.1-win64.exe
+```
+
+## Step 5: Boot and Install
+
+1. Insert the USB flash drive into the target laptop
+2. Boot from USB:
+   - Press the boot menu key during startup (typically F2, F10, F12, DEL, or ESC)
+   - Select the USB drive
+3. Windows installation begins automatically
+4. No input required
+
+## What happens automatically
+
+The answer file performs the following:
+
+- Selects Windows edition
+- Accepts the license terms
+- Partitions the system drive automatically
+- Creates the local administrator account
+- Enables automatic login
+- Disables Windows Defender (Tiny11 default)
+- Disables privacy questions (Tiny11 default)
+
+After installation, the system boots and the bootstrap phase begins.
+
+## Troubleshooting
+
+| Problem | Solution |
+|---|---|
+| USB not booting | Check BIOS boot order, enable legacy boot or UEFI as appropriate |
+| Answer file not detected | Verify autounattend.xml is in the root of the USB drive with the correct filename |
+| Installation asks questions | The answer file may not match the Tiny11 edition. Check the product key or edition settings in the answer file |

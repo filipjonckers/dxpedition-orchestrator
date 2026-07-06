@@ -152,7 +152,6 @@ Initially the deployment should support:
 - WSJT-X
 - MSHV
 - DXLog
-- N1MM
 
 Future software should be easy to add without redesigning the project.
 
