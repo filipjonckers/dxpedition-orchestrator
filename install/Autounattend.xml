@@ -101,6 +101,11 @@
                     <Path>powershell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force"</Path>
                     <Description>Set execution policy</Description>
                 </RunSynchronousCommand>
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>2</Order>
+                    <Path>powershell -Command "$usb = Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root 'Autounattend.xml') } | Select-Object -First 1; if ($usb) { Copy-Item (Join-Path $usb.Root 'dxpedition-orchestrator') 'C:\dxpedition-orchestrator' -Recurse -Force; Write-Output 'Repository copied from USB to C:\dxpedition-orchestrator' } else { Write-Output 'USB drive not found, repository copy skipped' }"</Path>
+                    <Description>Copy repository from USB to local disk</Description>
+                </RunSynchronousCommand>
             </RunSynchronous>
         </component>
     </settings>
