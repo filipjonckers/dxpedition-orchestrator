@@ -135,10 +135,10 @@ Goal: optional driver installation.
 
 Tasks:
 
-- Implement install-drivers.ps1
-- Use Windows Update first
-- Use local drivers/ folder if available
-- Skip if nothing is available
+[x] Implement install-drivers.ps1
+[x] Use Windows Update first
+[x] Use local drivers/ folder if available
+[x] Skip if nothing is available
 
 Result:
 
