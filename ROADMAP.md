@@ -115,13 +115,13 @@ Goal: apply system settings.
 
 Tasks:
 
-- Set display scaling (150%)
-- Set black desktop background (#000000)
-- Disable wallpaper
-- Configure keyboard:
-  - Belgian AZERTY
-  - US International secondary
-- Apply performance settings
+[x] Set display scaling (150%)
+[x] Set black desktop background (#000000)
+[x] Disable wallpaper
+[x] Configure keyboard:
+    - Belgian AZERTY
+    - US International secondary
+[x] Apply performance settings
 
 Result:
 
