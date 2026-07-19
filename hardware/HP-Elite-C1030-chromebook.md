@@ -30,7 +30,7 @@ Your HP Elite c1030 uses a CR50 security chip. To install custom firmware, you m
 
 With WP disabled and Developer Mode on, you can now overwrite the BIOS:
 
-1. On the ChromeOS welcome screen, press Ctrl + Alt + F2 (the Right Arrow key on the top row). This opens a black terminal screen.
+1. On the ChromeOS welcome screen, press Ctrl + Alt + F2 (refresh key). This opens a black terminal screen.
 2. Type chronos and press Enter to log in.
 3. Run the MrChromebox Firmware Utility Script by typing the following command exactly as written (Note: -LO contains a capital "O", not a zero):
 
