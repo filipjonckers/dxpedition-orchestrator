@@ -4,7 +4,7 @@
 
 | Phase | Status | Key files |
 |---|---|---|
-| 2 Windows Installation | Done | `install/Autounattend.xml`, `docs/boot.md` |
+| 2 Windows Installation | Done | `install/Autounattend.xml`, `docs/boot-usb-drive-tiny11.md` |
 | 3 Bootstrap | Done | `scripts/bootstrap.ps1` (WiFi, no Git) |
 | 4 Core Deployment | Done | `scripts/deploy.ps1`, `scripts/helpers.ps1` |
 | 5 Windows Configuration | Done | `scripts/configure-windows.ps1` (privacy included) |
@@ -85,11 +85,10 @@
 │       └── 06 Touchscreen/
 ├── files/.gitkeep
 ├── docs/
-│   ├── boot.md              # USB preparation guide
-│   └── testing.md           # Test plan with checkboxes
-└── hardware/
-    ├── usb-drive-tiny11.md  # Tiny11 ISO + Rufus guide
-    └── HP-Elite-C1030-chromebook.md
+│   ├── boot-usb-drive-tiny11.md  # USB preparation guide
+│   ├── testing.md                # Test plan with checkboxes
+│   └── hardware/
+│       └── HP-Elite-C1030-chromebook.md
 ```
 
 ## When resuming
