@@ -6,11 +6,11 @@
 
 DXpedition Orchestrator is a lightweight Windows deployment toolkit for Tiny11 laptops.
 
-It automatically installs, configures and prepares Windows systems using PowerShell and configuration files stored in Git.
+It automatically installs, configures and prepares Windows systems using PowerShell and configuration files stored in a separate directory on the installation USB flash drive.
 
 Target environment:
 
-- up to 8 laptops
+- 8 to 10 laptops
 - Personal use
 - No enterprise infrastructure
 
@@ -30,13 +30,12 @@ Deployment flow:
 
 1. Tiny11 installs Windows automatically
 2. bootstrap.ps1 runs on first boot
-3. Git is installed if needed
-4. Repository is cloned or updated
-5. deploy.ps1 is executed
-6. System is configured
-7. Drivers are installed
-8. Software is installed
-9. Deployment completes
+3. deploy.ps1 is executed
+4. System is configured
+5. Drivers are installed
+6. Software is installed
+7. Software is configured
+8. Deployment completes
 
 ---
 
@@ -58,13 +57,13 @@ Only use:
 
 - PowerShell
 - Windows built-in tools
-- Git
 - YAML configuration files
 
 ---
 
 ## Git Rules
 
+- The project is managed in a Git repository
 - Only work in the current branch
 - No new feature branches
 - No new release branches
@@ -100,9 +99,9 @@ Keep structure flat and readable:
 - install/ → installation files
 - scripts/ → all PowerShell logic
 - config/ → YAML configuration
-- software/ → installers or install logic
+- software/ → installers or install logic - one sub directory per package
 - hardware/ → hardware preparation notes
-- drivers/ → driver packages
+- drivers/ → driver packages - one sub directory per driver
 - files/ → files copied to the system
 - docs/ → documentation
 - logs/ → deployment logs
@@ -183,10 +182,9 @@ Deployment must always:
 Critical failures:
 
 - Bootstrap failure
-- Git failure
 - deploy.ps1 failure
-- software installation
-- driver installation
+- software installation failure
+- driver installation failure
 - file copy
 
 Optional failures:
@@ -250,6 +248,7 @@ Default system settings include:
 - Display scaling: 150%
 - Desktop background: solid black (#000000)
 - Wallpaper disabled
+- Windows shall not share any privacy data with Microsoft
 
 Performance must always be prioritized.
 
@@ -280,11 +279,19 @@ Adding new software must NOT require redesign.
 
 Driver installation order:
 
-1. Windows Update (preferred)
+1. Windows Update (mandatory)
 2. Local drivers/ folder
 3. Skip if not available
 
 Drivers must never break deployment if missing.
+
+### Local driver rules
+
+- The local drivers folder contains a directory for each supported hardware type.
+- The hardware type to use shall be defined in the system configuration `system.yaml` file.
+- Only install the drivers for the given hardware type.
+- Each driver is in it's own sub directory.
+- The driver sub directory name defines the order of installation: `01 driver` is installed before `05 driver`
 
 ---
 
@@ -296,6 +303,8 @@ Rules:
 
 - Structure mirrors destination structure
 - No dynamic generation unless necessary
+- Use of wildcards is allowed to copy
+- Recursively copy directory content if wildcards are used
 - Must be configurable via YAML
 
 ---

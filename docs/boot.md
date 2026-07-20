@@ -32,28 +32,31 @@ The answer file automates the entire Windows installation.
 
 The file must be at the root of the USB drive.
 
-## Step 3: Copy Repository
+## Step 3: Add the dxpedition-orchestrator directory
 
-1. Clone the repository to the USB flash drive:
+Two methods can be used:
+
+1. Copy the this project into `X:\dxpedition-orchestrator
+2. Clone the repository to the USB flash drive:
 
    ```powershell
    git clone <repository-url> X:\dxpedition-orchestrator
    ```
 
-2. Replace X: with the actual drive letter of your USB flash drive
+Replace X: with the actual drive letter of your USB flash drive
 
-## Step 4: Copy Installers (Optional)
-
-If internet access will not be available during deployment:
+## Step 4: Copy or update Installers (Optional)
 
 1. Download required software installers on the preparation PC
 2. Copy them into `X:\dxpedition-orchestrator\software\<package>\` on the USB drive
+3. Verify the `install.yaml` for each package, adapt the software installer executable name.
 
 Each installer must be placed in its corresponding package directory.
 
 Example:
 
 ```
+software\N1MM-Logger-plus\DXLog.msi
 software\N1MM-Logger-plus\N1MMLoggerPlus.exe
 software\WSJT-X\wsjtx-installer.exe
 ```
