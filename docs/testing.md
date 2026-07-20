@@ -9,9 +9,9 @@ Run through each test after preparing a Tiny11 USB drive following [boot.md](boo
 - [ ] Tiny11 ISO downloaded from official source
 - [ ] USB flashed with Rufus (GPT, UEFI, remove TPM/Secure Boot requirements)
 - [ ] `install/Autounattend.xml` copied to USB root, renamed to `autounattend.xml`
-- [ ] Repository cloned to USB: `git clone <url> X:\dxpedition-orchestrator`
-- [ ] Git installer (e.g. `Git-*.exe`) copied to `software/Git/` on USB (if no internet during deployment)
+- [ ] Project directory copied to USB: `X:\dxpedition-orchestrator`
 - [ ] Software installers copied to their respective `software/<package>/` directories on USB
+- [ ] `config/wifi.yaml` configured if WiFi is needed, or USB-C Ethernet adapter available
 
 ---
 
@@ -33,11 +33,7 @@ Run through each test after preparing a Tiny11 USB drive following [boot.md](boo
 - [ ] `bootstrap.ps1` runs automatically on first logon
 - [ ] Log file created at `C:\dxpedition-orchestrator\logs\deploy.log`
 - [ ] PowerShell execution policy set to `RemoteSigned`
-- [ ] Git installation:
-  - [ ] Installed from USB `software/Git/` when no internet, OR
-  - [ ] Installed via winget when internet available, OR
-  - [ ] Skipped if already installed
-- [ ] Repository pulled if `.git` exists, skipped if copied from USB without Git metadata
+- [ ] WiFi connection attempt logged (success or fallback to Ethernet)
 - [ ] `deploy.ps1` starts automatically after bootstrap completes
 
 ---
@@ -64,49 +60,55 @@ Run through each test after preparing a Tiny11 USB drive following [boot.md](boo
 - [ ] Desktop background: solid black (`#000000`)
 - [ ] Wallpaper disabled
 - [ ] Performance settings applied (visual effects minimized)
+- [ ] Telemetry disabled (`AllowTelemetry = 0`)
+- [ ] Cortana disabled (`AllowCortana = 0`)
+- [ ] Advertising ID disabled (`DisabledByGroupPolicy = 1`)
+- [ ] Wi-Fi hotspot reporting disabled
 
 ---
 
 ## 6. Driver Installation
 
-Test each `driver_mode` from `config/system.yml`:
+Drivers are installed in two steps:
 
-### `driver_mode: windows_update`
+### Step 1: Windows Update
 
 - [ ] Windows Update COM API scan runs without error
 - [ ] Available driver updates are found (or "no updates" logged)
 - [ ] Driver downloads and installation proceed
 - [ ] Reboot logged if required
 
-### `driver_mode: local`
+### Step 2: Local Drivers
 
-- [ ] `/drivers/` folder is scanned for `.inf` files
-- [ ] `pnputil /add-driver` runs without error
+- [ ] `hardware_type` is read from `config/system.yml`
+- [ ] Correct `drivers/<hardware_type>/` directory is located
+- [ ] Numbered subdirectories are processed in order
+- [ ] `.exe` drivers are installed via `Start-Process -Wait`
 - [ ] Exit code checked and logged
-
-### `driver_mode: skip`
-
-- [ ] Driver installation phase skips immediately
-- [ ] Log confirms "Driver installation skipped per configuration"
+- [ ] Missing directories or missing `.exe` files are skipped with log warning
 
 ---
 
 ## 7. Software Installation
 
+- [ ] Packages are installed in directory name order (`01` before `02` before `04`...)
+
 Test each enabled package from `config/software.yml`:
 
 - [ ] Package without installer on disk and no URL → logged as skipped
-- [ ] Package with installer on disk → installed with configured arguments
+- [ ] Package `.exe` with installer on disk → installed with configured arguments
+- [ ] Package `.msi` with installer on disk → installed via `msiexec.exe /i`
 - [ ] Exit code checked: 0 = success, non‑zero = logged as failure
 - [ ] Already‑installed package (detected via `expected_path`) → skipped
 - [ ] Failed package reported in summary
 
 ### Per‑package verification
 
+- [ ] **Visual C++ Redistributable** installed
+- [ ] **DXLog** launches and shows main window
 - [ ] **N1MM Logger+** launches and shows main window
 - [ ] **WSJT-X** launches and shows main window
 - [ ] **MSHV** launches and shows main window
-- [ ] **DXLog** launches and shows main window
 
 ---
 
@@ -142,9 +144,10 @@ Test each enabled package from `config/software.yml`:
 ## 11. Error Handling
 
 - [ ] Remove USB drive during deployment → deployment continues with logged errors
-- [ ] Disable network → winget/Git pull fail gracefully, deployment continues
+- [ ] Disable network → WiFi fails gracefully, deployment continues
 - [ ] Corrupt installer file → logged as error, does not crash deploy.ps1
 - [ ] Missing YAML config → defaults used, warning logged
+- [ ] Missing driver `.exe` → skipped with log warning
 
 ---
 

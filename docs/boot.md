@@ -7,7 +7,7 @@ Guide for preparing a Tiny11 USB flash drive that installs Windows automatically
 ## Requirements
 
 - Tiny11 ISO image (download from the official source)
-- USB flash drive (8 GB or larger)
+- USB flash drive (16 GB or larger — needs space for project directory + installers)
 - Windows PC with Rufus (or similar tool)
 - This repository
 
@@ -34,34 +34,54 @@ The file must be at the root of the USB drive.
 
 ## Step 3: Add the dxpedition-orchestrator directory
 
-Two methods can be used:
+Copy the entire project directory to the USB flash drive:
 
-1. Copy the this project into `X:\dxpedition-orchestrator
-2. Clone the repository to the USB flash drive:
+```
+X:\dxpedition-orchestrator\
+  ├── config/
+  ├── scripts/
+  ├── software/
+  ├── drivers/
+  ├── files/
+  ├── install/
+  └── ...
+```
 
-   ```powershell
-   git clone <repository-url> X:\dxpedition-orchestrator
-   ```
+Replace X: with the actual drive letter of your USB flash drive.
 
-Replace X: with the actual drive letter of your USB flash drive
-
-## Step 4: Copy or update Installers (Optional)
+## Step 4: Copy or update Installers
 
 1. Download required software installers on the preparation PC
 2. Copy them into `X:\dxpedition-orchestrator\software\<package>\` on the USB drive
-3. Verify the `install.yaml` for each package, adapt the software installer executable name.
+3. Verify the `install.yaml` for each package, adapt the software installer executable name if needed
 
 Each installer must be placed in its corresponding package directory.
 
 Example:
 
 ```
-software\N1MM-Logger-plus\DXLog.msi
-software\N1MM-Logger-plus\N1MMLoggerPlus.exe
-software\WSJT-X\wsjtx-installer.exe
+software\01 vc_redist\VC_redist.x64.exe
+software\02 DXLog\DXLog.net-latest.msi
+software\04 N1MM-Logger-plus\N1MM-Logger-FullInstaller-latest.exe
+software\05 WSJT-X\wsjtx-latest-win64.exe
+software\06 MSHV\MSHV_latest_Installer_32_and_64bit.exe
 ```
 
-## Step 5: Boot and Install
+## Step 5: Configure WiFi (Optional)
+
+If internet access is required during deployment (e.g. Windows Update drivers, software downloads):
+
+1. Open `config/wifi.yaml` on the USB drive
+2. Set the SSID and password:
+
+```yaml
+ssid: "YourNetworkName"
+password: "YourPassword"
+```
+
+If `wifi.yaml` does not exist or is empty, a USB-C Ethernet adapter must be connected during deployment.
+
+## Step 6: Boot and Install
 
 1. Insert the USB flash drive into the target laptop
 2. Boot from USB:
@@ -82,7 +102,15 @@ The answer file performs the following:
 - Disables Windows Defender (Tiny11 default)
 - Disables privacy questions (Tiny11 default)
 
-After installation, the system boots and the bootstrap phase begins.
+After installation, the system boots and the bootstrap phase begins:
+
+1. Bootstrap connects to WiFi (if configured)
+2. Deploy starts
+3. Windows is configured (display, keyboard, privacy, performance)
+4. Drivers are installed (Windows Update + local drivers)
+5. Software is installed (in directory name order)
+6. Configuration files are copied
+7. System is ready for use
 
 ## Troubleshooting
 
@@ -91,3 +119,5 @@ After installation, the system boots and the bootstrap phase begins.
 | USB not booting | Check BIOS boot order, enable legacy boot or UEFI as appropriate |
 | Answer file not detected | Verify autounattend.xml is in the root of the USB drive with the correct filename |
 | Installation asks questions | The answer file may not match the Tiny11 edition. Check the product key or edition settings in the answer file |
+| No network during deployment | Check WiFi config in `config/wifi.yaml` or connect USB-C Ethernet adapter |
+| Deployment continues after errors | Non-critical failures (e.g. drivers) are logged; check `logs/deploy.log` for details |

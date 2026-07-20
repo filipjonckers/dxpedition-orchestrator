@@ -6,7 +6,7 @@
 
 DXpedition Orchestrator is a lightweight deployment toolkit for automatically installing, configuring and maintaining Windows Tiny11 laptops for DXpedition usage.
 
-The project is intended for a medium DXpedition environment consisting of approximately eight laptops.
+The project is intended for a medium DXpedition environment consisting of approximately eight to ten laptops.
 
 The primary objective is to minimize manual work while keeping the solution simple, maintainable and reliable.
 
@@ -59,11 +59,10 @@ The project does not include:
 
 Hardware:
 
-- Approximately eight notebooks.
+- Approximately eight to ten notebooks.
 - Notebook manufacturer is unknown.
-- Internet connection is available.
+- Network connection via WiFi or USB-C Ethernet adapter.
 - Network configuration uses DHCP.
-- Wireless networking may be used.
 
 ---
 
@@ -76,14 +75,13 @@ The complete deployment process consists of the following stages:
 3. Windows creates the predefined administrator account.
 4. Automatic logon occurs.
 5. Bootstrap script executes.
-6. Git is installed if necessary.
-7. Repository is cloned or updated.
-8. Deployment script executes.
-9. Windows configuration is applied.
+6. WiFi connection is established if configured.
+7. Deployment script executes.
+8. Windows configuration is applied (including privacy settings).
+9. Drivers are installed (Windows Update + local drivers).
 10. Software is installed.
-11. Drivers are installed if available.
-12. Configuration files are copied.
-13. Deployment finishes.
+11. Configuration files are copied.
+12. Deployment finishes.
 
 ---
 
@@ -104,8 +102,7 @@ The deployment must support the following functionality.
 ### Bootstrap
 
 - Prepare Windows for deployment.
-- Install Git if required.
-- Clone or update the repository.
+- Connect to WiFi if configured in `config/wifi.yaml`.
 - Start the deployment process.
 - Create deployment logs.
 
@@ -118,11 +115,11 @@ Configuration should be stored outside the scripts whenever possible.
 Configuration includes:
 
 - computer name
-- user information
 - display settings
 - keyboard settings
 - software selection
-- driver behavior
+- hardware type
+- WiFi SSID and password
 
 ---
 
@@ -138,6 +135,7 @@ Initially this includes:
 - Keyboard: Belgian AZERTY
 - Secondary keyboard: US International
 - Language selector visible in the taskbar.
+- Privacy: telemetry off, Cortana disabled, advertising ID off
 - Explorer settings should be configurable.
 
 Additional settings may be added later.
@@ -152,6 +150,9 @@ Initially the deployment should support:
 - WSJT-X
 - MSHV
 - DXLog
+- Visual C++ Redistributable
+
+Installation order is determined by the directory name prefix (e.g. `01 vc_redist` installs before `02 DXLog`).
 
 Future software should be easy to add without redesigning the project.
 
@@ -161,11 +162,13 @@ Future software should be easy to add without redesigning the project.
 
 Driver installation must be optional.
 
-Preferred installation order:
+Installation order:
 
-1. Windows Update
-2. Repository driver packages
-3. No installation if nothing is available
+1. Windows Update (mandatory)
+2. Local driver packages from `drivers/<hardware_type>/` directory
+3. Skip if nothing is available
+
+Local drivers are `.exe` installers executed in numbered subdirectory order.
 
 The deployment should not fail because drivers are unavailable.
 

@@ -8,7 +8,7 @@ A lightweight automated Windows (Tiny11) deployment system for DXpedition loggin
 
 DXpedition Orchestrator automatically installs and configures Windows laptops from a clean Tiny11 installation.
 
-It is designed for a small personal setup (~8 laptops) and focuses on:
+It is designed for a small personal setup (8 to 10 laptops) and focuses on:
 
 - Simplicity
 - Repeatability
@@ -24,9 +24,9 @@ After running this system, a laptop will:
 - Have Windows installed and configured
 - Have a local administrator account
 - Log in automatically
-- Be fully configured (display, keyboard, desktop)
+- Be fully configured (display, keyboard, desktop, privacy)
 - Have required software installed
-- Have drivers installed
+- Have drivers installed (Windows Update + local)
 - Be ready for immediate use
 
 ---
@@ -34,16 +34,14 @@ After running this system, a laptop will:
 ## High-level flow
 
 1. Tiny11 USB flash drive is prepared
-2. Repository is cloned on the USB flash drive
-3. Optionally install packages - executables can be added to the USB flash drive
+2. Project directory is copied to the USB flash drive
+3. Installer executables are copied to `software/<package>/` directories
 4. Boot from Tiny11 USB
 5. Windows installs automatically
-6. Bootstrap runs on first boot
-7. Git is installed
-8. Repository is cloned for later updates or restores
-9. copy installers from USB flash drive into `software/` directory
-10. Deploy script runs
-11. System is fully configured
+6. Bootstrap runs on first boot, connects to WiFi if configured
+7. Deploy script runs
+8. System is configured, drivers installed, software installed, files copied
+9. System is fully configured
 
 ---
 
@@ -65,9 +63,9 @@ In most cases, deploy.ps1 is triggered automatically by Bootstrap.
 install/        → Windows installation files (Autounattend, Bootstrap)
 scripts/        → All deployment logic (PowerShell)
 config/         → YAML configuration files
-software/       → Software definitions and installers
+software/       → Software definitions and installers — one subdirectory per package
 hardware/       → Hardware specific notes, how to prepare specific hardware
-drivers/        → Optional driver packages
+drivers/        → Driver packages — one subdirectory per hardware type
 files/          → Files copied to the system
 docs/           → Technical documentation
 logs/           → Deployment logs
@@ -79,9 +77,9 @@ logs/           → Deployment logs
 
 The hardware directory only contains notes concerning preparing different hardware platforms.
 
-The preparation of the hardware is out of scope of this project and shall be concidered as done.
+The preparation of the hardware is out of scope of this project and shall be considered as done.
 
-Exception is the installation of hardware specific drivers which is part of the drivers phase.  Selection of hardware type can be part of a selection menu on initial start of the installation scripts which shall then be saved as part of the configuration.
+Exception is the installation of hardware specific drivers which is part of the drivers phase. Hardware type is defined in `config/system.yml`.
 
 ---
 
@@ -100,6 +98,8 @@ Example settings:
 - software list
 - desktop settings
 - hostname
+- WiFi SSID and password
+- hardware type
 
 No hardcoded machine-specific values in scripts.
 
@@ -109,10 +109,11 @@ No hardcoded machine-specific values in scripts.
 
 To add software:
 
-1. Add entry in `config/software.yml`
-2. use URL defined in `config/software.yml` to download installer.
-3. Add installer or script in `software/` if URL not defined
-4. Run deployment
+1. Create a directory in `software/` with a numbered prefix (e.g. `03 my-app`)
+2. Add `install.yaml` with installer name, arguments, and expected path
+3. Copy the installer executable (`.exe` or `.msi`) into the directory
+4. Add the directory name to `config/software.yml`
+5. Run deployment
 
 No architecture changes required.
 
@@ -138,8 +139,8 @@ This will:
 ## Requirements
 
 - Windows Tiny11 installed
-- Internet connection (DHCP/WiFi)
-- Git (installed automatically if missing)
+- Network connection: WiFi (configured via `config/wifi.yaml`) or USB-C Ethernet adapter
+- DHCP enabled
 
 ---
 
@@ -149,7 +150,7 @@ This project does NOT use:
 
 - Linux
 - WSL
-- Ansible (because this needs a Linux server)
+- Ansible
 - Intune / SCCM / MDT
 - Domain controllers
 - CI/CD pipelines

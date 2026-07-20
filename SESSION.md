@@ -5,33 +5,37 @@
 | Phase | Status | Key files |
 |---|---|---|
 | 2 Windows Installation | Done | `install/Autounattend.xml`, `docs/boot.md` |
-| 3 Bootstrap | Done | `scripts/bootstrap.ps1` |
+| 3 Bootstrap | Done | `scripts/bootstrap.ps1` (WiFi, no Git) |
 | 4 Core Deployment | Done | `scripts/deploy.ps1`, `scripts/helpers.ps1` |
-| 5 Windows Configuration | Done | `scripts/configure-windows.ps1` |
-| 6 Drivers | Done | `scripts/install-drivers.ps1` |
-| 7 Software | Done | `scripts/install-software.ps1`, `software/*/install.yaml` |
+| 5 Windows Configuration | Done | `scripts/configure-windows.ps1` (privacy included) |
+| 6 Drivers | Done | `scripts/install-drivers.ps1` (WU + local .exe) |
+| 7 Software | Done | `scripts/install-software.ps1` (exe + msi, sorted by name) |
 | 8 File Copy | Done | `scripts/copy-files.ps1` |
 | 9 Restore | Done | `scripts/restore.ps1` |
 
 ## Key decisions made during development
 
-- N1MM (duplicate) removed from software lists — keep only N1MM Logger+
-- AGENTS.md directory listing updated to include hardware/, files/, logs/
-- YAML configs deferred to Phase 4 (created then, not earlier)
-- Hardware type selection menu deferred (future)
-- Timezone set to UTC (not Romance Standard Time)
-- docs/boot.md lives in docs/ (not install/)
-- software/ contains install logic only; actual installer binaries stay on USB
+- USB-based deployment — no Git dependency
+- WiFi configured via `config/wifi.yaml`; Ethernet adapter fallback
+- Driver installation: always Windows Update first, then local `.exe` drivers
+- Software installation order determined by directory name prefix (`01 vc_redist` before `02 DXLog`)
+- MSI installers handled via `msiexec.exe /i`
+- Privacy settings: telemetry off, Cortana disabled, advertising ID off
+- Hardware type defined in `config/system.yml` (e.g. `HP C1030 Chromebook`)
+- Sound driver for C1030 requires purchase — skipped with a README note
+- Keyboard: Belgian AZERTY primary, US International secondary, switchable via taskbar
 
 ## Bugs fixed during review
 
-- Autounattend.xml now searches for lowercase `autounattend.xml` (matched docs)
-- bootstrap.ps1 Git installer uses wildcard `*.exe` (not hardcoded version)
-- install-drivers.ps1 checks `$LASTEXITCODE` after pnputil
-- helpers.ps1 simplified LogFile assignment
-- files/ and drivers/ directories created with .gitkeep
-- hostname + timezone wired from system.yml into configure-windows.ps1
-- Removed unused `username`/`password` from system.yml
+- `.gitignore` `software/**/*` pattern excluded parent dirs, causing install.yaml deletion — fixed to `software/*/*` + `!software/*/install.yaml`
+- MSHV install.yaml had wrong installer path (`software/MSHV/` prefix doubled)
+- DXLog used InnoSetup args (`/VERYSILENT`) for an `.msi` file — changed to `/quiet /norestart`
+- `install-drivers.ps1` modes were mutually exclusive — now runs WU then local drivers
+- `install-drivers.ps1` local mode used `pnputil` for `.inf` files — now executes `.exe` installers
+- `bootstrap.ps1` still referenced Git — removed, replaced with WiFi connection
+- `install-software.ps1` had no install order — added `Sort-Object`
+- `install-software.ps1` had no MSI handling — added `msiexec.exe /i` for `.msi` files
+- `configure-windows.ps1` had no privacy settings — added telemetry, Cortana, advertising ID, hotspot reporting
 
 ## Current state
 
@@ -53,24 +57,32 @@
 ├── install/
 │   └── Autounattend.xml    # Unattended Windows answer file
 ├── scripts/
-│   ├── bootstrap.ps1       # First-boot prep (Git, repo, trigger deploy)
+│   ├── bootstrap.ps1       # First-boot prep (WiFi, trigger deploy)
 │   ├── deploy.ps1          # Orchestrator (4 phases, critical/non-critical)
 │   ├── helpers.ps1         # Write-Log, Read-Yaml
-│   ├── configure-windows.ps1  # Scaling, keyboard, desktop, perf, hostname, tz
-│   ├── install-drivers.ps1    # Windows Update / local pnputil / skip
-│   ├── install-software.ps1   # YAML-driven unattended install
+│   ├── configure-windows.ps1  # Scaling, keyboard, desktop, perf, privacy, hostname, tz
+│   ├── install-drivers.ps1    # Windows Update + local .exe drivers
+│   ├── install-software.ps1   # YAML-driven unattended install (exe + msi, sorted)
 │   ├── copy-files.ps1         # Pipe-format file mapping
 │   └── restore.ps1            # Re-runs config + software + files
 ├── config/
-│   ├── system.yml           # Hostname, keyboard, scaling, desktop, tz, driver_mode
-│   ├── software.yml         # Package list
+│   ├── system.yml           # Hostname, keyboard, scaling, desktop, tz, hardware_type
+│   ├── software.yml         # Package list (numbered dir names)
+│   ├── wifi.yaml            # WiFi SSID and password
 │   └── files.yml            # File mappings (commented examples)
 ├── software/
-│   ├── N1MM-Logger-plus/install.yaml
-│   ├── WSJT-X/install.yaml
-│   ├── MSHV/install.yaml
-│   └── DXLog/install.yaml
-├── drivers/.gitkeep
+│   ├── 01 vc_redist/install.yaml
+│   ├── 02 DXLog/install.yaml
+│   ├── 04 N1MM-Logger-plus/install.yaml
+│   ├── 05 WSJT-X/install.yaml
+│   └── 06 MSHV/install.yaml
+├── drivers/
+│   └── HP C1030 Chromebook/
+│       ├── 01 TPM/
+│       ├── 03 intel chipset/
+│       ├── 04 Sound/README.md
+│       ├── 05 Touchpad/
+│       └── 06 Touchscreen/
 ├── files/.gitkeep
 ├── docs/
 │   ├── boot.md              # USB preparation guide

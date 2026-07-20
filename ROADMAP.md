@@ -9,7 +9,7 @@
 Build a simple, reliable Windows (Tiny11) deployment system that fully configures a laptop using:
 
 - Bootstrap (first boot)
-- Git repository
+- USB-based deployment (no Git dependency)
 - PowerShell scripts
 - YAML configuration files
 
@@ -56,12 +56,12 @@ Goal: fully automatic Windows installation.
 
 Tasks:
 
-- Write how to adapt the Tiny11 USB installer in boot.md
-- Configure Tiny11 USB installer
-- Add Autounattend.xml
-- Enable automatic partitioning
-- Create local administrator account
-- Enable automatic login
+[x] Write how to adapt the Tiny11 USB installer in boot.md
+[x] Configure Tiny11 USB installer
+[x] Add Autounattend.xml
+[x] Enable automatic partitioning
+[x] Create local administrator account
+[x] Enable automatic login
 
 Result:
 
@@ -75,12 +75,11 @@ Goal: prepare Windows for deployment after first boot.
 
 Tasks:
 
-- Create bootstrap.ps1
-- Install or update Git if missing
-- Configure execution policy
-- Clone or update repository
-- Create logs directory
-- Start deploy.ps1 automatically
+[x] Create bootstrap.ps1
+[x] Connect to WiFi if configured in `config/wifi.yaml`
+[x] Configure execution policy
+[x] Create logs directory
+[x] Start deploy.ps1 automatically
 
 Result:
 
@@ -94,14 +93,14 @@ Goal: main deployment logic.
 
 Tasks:
 
-- Create deploy.ps1
-- Load YAML configuration
-- Execute scripts in correct order:
+[x] Create deploy.ps1
+[x] Load YAML configuration
+[x] Execute scripts in correct order:
   - configure-windows.ps1
   - install-drivers.ps1
   - install-software.ps1
   - copy-files.ps1
-- Implement logging
+[x] Implement logging
 
 Result:
 
@@ -122,6 +121,7 @@ Tasks:
     - Belgian AZERTY
     - US International secondary
 [x] Apply performance settings
+[x] Disable telemetry, Cortana, advertising ID
 
 Result:
 
@@ -136,9 +136,9 @@ Goal: optional driver installation.
 Tasks:
 
 [x] Implement install-drivers.ps1
-[x] Use Windows Update first
-[x] Use local drivers/ folder if available
-[x] Skip if nothing is available
+[x] Always run Windows Update first
+[x] Install local `.exe` drivers from `drivers/<hardware_type>/` numbered subdirectories
+[x] Skip missing directories gracefully
 
 Result:
 
@@ -154,11 +154,14 @@ Tasks:
 
 [x] Implement install-software.ps1
 [x] Add support for YAML-based software list
+[x] Installation order determined by directory name prefix
+[x] Support both `.exe` and `.msi` installers
 [x] Install initial applications:
-    - N1MM Logger+
-    - MSHV
-    - WSJT-X
+    - Visual C++ Redistributable
     - DXLog
+    - N1MM Logger+
+    - WSJT-X
+    - MSHV
 
 Result:
 
@@ -206,11 +209,15 @@ Goal: ensure reliability across multiple laptops.
 
 Tasks:
 
-- Test full installation flow
-- Test reinstall scenario
-- Test restore scenario
-- Verify logging
-- Fix edge cases
+[ ] Test full installation flow
+[ ] Test WiFi connection
+[ ] Test driver installation (Windows Update + local)
+[ ] Test software installation (exe + msi)
+[ ] Test privacy settings
+[ ] Test reinstall scenario
+[ ] Test restore scenario
+[ ] Verify logging
+[ ] Fix edge cases
 
 Result:
 
