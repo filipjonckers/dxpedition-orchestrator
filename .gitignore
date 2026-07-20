@@ -2,3 +2,15 @@ logs/
 *.log
 *.tmp
 .DS_Store
+
+# software specific - ignore all except install.yaml
+software/
+!software/
+software/**/*
+!software/install.yaml
+
+# drivers specific
+drivers/
+!drivers/
+drivers/**/*
+!drivers/.gitkeep
