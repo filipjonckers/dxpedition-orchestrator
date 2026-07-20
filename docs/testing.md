@@ -19,7 +19,8 @@ Run through each test after preparing a Tiny11 USB drive following [boot.md](boo
 
 - [ ] Laptop boots from USB
 - [ ] Windows installs without any manual input
-- [ ] Drive is partitioned automatically (EFI + MSR + NTFS)
+- [ ] Drive is partitioned automatically (EFI 100MB + MSR 16MB + NTFS rest)
+- [ ] Compact OS is enabled (reduced disk footprint)
 - [ ] Local administrator `dxpedition` account is created
 - [ ] Automatic login works (no password prompt at boot)
 - [ ] Belgian AZERTY keyboard is active during setup

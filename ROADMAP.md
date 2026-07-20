@@ -60,6 +60,7 @@ Tasks:
 [x] Configure Tiny11 USB installer
 [x] Add Autounattend.xml
 [x] Enable automatic partitioning
+[x] Enable Compact OS install
 [x] Create local administrator account
 [x] Enable automatic login
 

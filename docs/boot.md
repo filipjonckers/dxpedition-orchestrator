@@ -96,11 +96,17 @@ The answer file performs the following:
 
 - Selects Windows edition
 - Accepts the license terms
-- Partitions the system drive automatically
+- Partitions the system drive automatically (EFI + MSR + NTFS)
+- Enables Compact OS to reduce disk footprint
 - Creates the local administrator account
 - Enables automatic login
 - Disables Windows Defender (Tiny11 default)
 - Disables privacy questions (Tiny11 default)
+- Disables UAC
+- Disables Windows Firewall
+- Sets keyboard layout to Belgian AZERTY
+- Copies the deployment directory from USB to system drive
+- Runs bootstrap.ps1 on first logon
 
 After installation, the system boots and the bootstrap phase begins:
 
