@@ -14,6 +14,8 @@ if ($softwareList.Count -eq 0) {
     return
 }
 
+$softwareList = $softwareList | Sort-Object
+
 Write-Log "Software to install: $($softwareList -join ', ')"
 Write-Log "Software directory: $softwareDir"
 
@@ -69,7 +71,12 @@ function Install-SoftwarePackage {
     Write-Log "Package '$displayName' — arguments: $arguments"
 
     try {
-        $process = Start-Process -FilePath $installerPath -ArgumentList $arguments -Wait -NoNewWindow -PassThru
+        $extension = [System.IO.Path]::GetExtension($installerPath).ToLower()
+        if ($extension -eq ".msi") {
+            $process = Start-Process -FilePath "msiexec.exe" -ArgumentList "/i `"$installerPath`" $arguments" -Wait -NoNewWindow -PassThru
+        } else {
+            $process = Start-Process -FilePath $installerPath -ArgumentList $arguments -Wait -NoNewWindow -PassThru
+        }
         if ($process.ExitCode -eq 0) {
             Write-Log "Package '$displayName' — installation completed (exit code: 0)"
             return $true

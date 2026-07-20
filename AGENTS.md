@@ -162,7 +162,8 @@ Typical system configuration values:
 - display scaling
 - desktop settings
 - software selection
-- driver mode
+- hardware type
+- WiFi SSID and password
 
 ---
 
@@ -254,6 +255,17 @@ Performance must always be prioritized.
 
 ---
 
+## Network Rules
+
+Network connectivity is established during bootstrap:
+
+- WiFi configuration is stored in `config/wifi.yaml`
+- If `wifi.yaml` exists with valid SSID and password, bootstrap connects via WLAN
+- If `wifi.yaml` does not exist, a USB-C Ethernet adapter must be connected
+- DHCP is used for all network connections
+
+---
+
 ## Software Rules
 
 Software must be:
@@ -263,6 +275,7 @@ Software must be:
 - explicitly enabled via configuration
 - automatically installed without manual intervention (unattended installation)
 - installers shall be downloaded directly from the internet or copied from the USB flash drive into the corresponding directory in `software/`
+- installation order is determined by the directory name prefix (e.g. `01 vc_redist` installs before `02 DXLog`)
 
 Initial supported software:
 
@@ -290,8 +303,10 @@ Drivers must never break deployment if missing.
 - The local drivers folder contains a directory for each supported hardware type.
 - The hardware type to use shall be defined in the system configuration `system.yaml` file.
 - Only install the drivers for the given hardware type.
-- Each driver is in it's own sub directory.
-- The driver sub directory name defines the order of installation: `01 driver` is installed before `05 driver`
+- Each driver is in its own sub directory.
+- The driver sub directory name defines the order of installation: `01 driver` is installed before `05 driver`.
+- Local drivers are `.exe` installers executed with silent arguments. They are installed unattended.
+- Missing driver directories or missing `.exe` files are skipped with a log warning.
 
 ---
 

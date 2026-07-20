@@ -6,8 +6,8 @@ logs/
 # software specific - ignore all except install.yaml
 software/
 !software/
-software/**/*
-!software/install.yaml
+software/*/*
+!software/*/install.yaml
 
 # drivers specific
 drivers/

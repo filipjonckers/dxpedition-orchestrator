@@ -5,4 +5,4 @@ display_scaling: 150
 desktop_background: "#000000"
 wallpaper_disabled: true
 timezone: UTC
-driver_mode: windows_update
+hardware_type: "HP C1030 Chromebook"

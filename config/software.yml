@@ -1,5 +1,6 @@
 software:
-  - N1MM-Logger-plus
-  - WSJT-X
-  - MSHV
-  - DXLog
+  - 01 vc_redist
+  - 02 DXLog
+  - 04 N1MM-Logger-plus
+  - 05 WSJT-X
+  - 06 MSHV

@@ -1,0 +1,5 @@
+name: "Visual C++ Redistributable"
+installer: "VC_redist.x64.exe"
+arguments: "/install /quiet /norestart"
+url: ""
+expected_path: ""

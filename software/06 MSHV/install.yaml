@@ -1,5 +1,5 @@
 name: "MSHV"
-installer: "software/MSHV/MSHV_latest_Installer_32_and_64bit.exe"
+installer: "MSHV_latest_Installer_32_and_64bit.exe"
 arguments: "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-"
 url: ""
 expected_path: "C:\\Program Files (x86)\\MSHV"

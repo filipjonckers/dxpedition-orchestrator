@@ -19,45 +19,64 @@ Write-Log "Bootstrap started"
 Write-Log "Setting PowerShell execution policy"
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
-$gitAvailable = Get-Command git -ErrorAction SilentlyContinue
+$wifiConfig = "$RepoPath\config\wifi.yaml"
+if (Test-Path $wifiConfig) {
+    Write-Log "WiFi configuration found, attempting to connect"
 
-if (-not $gitAvailable) {
-    Write-Log "Git not found, attempting installation" "WARN"
+    $wifiContent = Get-Content $wifiConfig -Raw
+    $ssid = if ($wifiContent -match 'ssid:\s*"([^"]*)"') { $matches[1] } else { "" }
+    $password = if ($wifiContent -match 'password:\s*"([^"]*)"') { $matches[1] } else { "" }
 
-    $gitInstallerPath = "$RepoPath\software\Git"
-    $gitInstaller = Get-ChildItem -Path $gitInstallerPath -Filter "*.exe" | Select-Object -First 1
-    if ($gitInstaller) {
-        Write-Log "Installing Git from $($gitInstaller.FullName)"
-        Start-Process -FilePath $gitInstaller.FullName -ArgumentList "/VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /COMPONENTS='ext,ext\shellhere,ext\githere,gitlfs,assoc' /LOG=$LogDir\git-install.log" -Wait -NoNewWindow
-        Write-Log "Git installation completed"
+    if ($ssid -ne "" -and $password -ne "") {
+        Write-Log "Connecting to WiFi network: $ssid"
+
+        $profileXml = @"
+<?xml version="1.0"?>
+<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+    <name>$ssid</name>
+    <SSIDConfig>
+        <SSID>
+            <name>$ssid</name>
+        </SSID>
+    </SSIDConfig>
+    <connectionType>ESS</connectionType>
+    <connectionMode>auto</connectionMode>
+    <MSM>
+        <security>
+            <authEncryption>
+                <authentication>WPA2PSK</authentication>
+                <encryption>AES</encryption>
+                <useOneX>false</useOneX>
+            </authEncryption>
+            <sharedKey>
+                <keyType>passPhrase</keyType>
+                <protected>false</protected>
+                <keyMaterial>$password</keyMaterial>
+            </sharedKey>
+        </security>
+    </MSM>
+</WLANProfile>
+"@
+        $profilePath = "$env:TEMP\wifi-profile.xml"
+        $profileXml | Out-File -FilePath $profilePath -Encoding UTF8 -Force
+
+        try {
+            $addResult = netsh wlan add profile filename="$profilePath" 2>&1
+            Write-Log "WiFi profile added: $addResult"
+            $connectResult = netsh wlan connect name="$ssid" 2>&1
+            Write-Log "WiFi connect result: $connectResult"
+        } catch {
+            Write-Log "WiFi connection failed: $($_.Exception.Message)" "WARN"
+        }
+
+        Remove-Item $profilePath -Force -ErrorAction SilentlyContinue
     } else {
-        Write-Log "Local Git installer not found in $gitInstallerPath" "WARN"
-        Write-Log "Attempting Git install via winget"
-        $wingetResult = winget install --id Git.Git -e --source winget --accept-source-agreements --accept-package-agreements 2>&1
-        Write-Log "winget result: $wingetResult"
+        Write-Log "WiFi config incomplete (ssid or password missing)" "WARN"
+        Write-Log "Expecting USB-C Ethernet adapter"
     }
 } else {
-    Write-Log "Git is already installed"
-}
-
-$env:Path = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [Environment]::GetEnvironmentVariable("Path", "User")
-
-$gitAvailable = Get-Command git -ErrorAction SilentlyContinue
-if (-not $gitAvailable) {
-    Write-Log "Git is not available after installation attempt" "ERROR"
-    Write-Log "Deployment will continue without Git updates"
-} else {
-    Write-Log "Git is available: $(git --version)"
-    $gitDir = "$RepoPath\.git"
-    if (Test-Path $gitDir) {
-        Write-Log "Repository has Git metadata, pulling latest changes"
-        Push-Location $RepoPath
-        git pull 2>&1 | ForEach-Object { Write-Log "git pull: $_" }
-        Pop-Location
-        Write-Log "Repository update completed"
-    } else {
-        Write-Log "Repository was copied from USB (no Git metadata), skipping pull"
-    }
+    Write-Log "No WiFi configuration found at $wifiConfig"
+    Write-Log "Expecting USB-C Ethernet adapter"
 }
 
 if (-not (Test-Path $LogDir)) {

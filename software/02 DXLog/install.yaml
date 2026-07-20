@@ -1,5 +1,5 @@
 name: "DXLog"
 installer: "DXLog.net-latest.msi"
-arguments: "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-"
+arguments: "/quiet /norestart"
 url: ""
 expected_path: "C:\\Program Files (x86)\\DXLog"

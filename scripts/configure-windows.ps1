@@ -16,6 +16,51 @@ $desktopBackground = if ($config.ContainsKey("desktop_background")) { $config["d
 $hostname = if ($config.ContainsKey("hostname")) { $config["hostname"] } else { "" }
 $timezone = if ($config.ContainsKey("timezone")) { $config["timezone"] } else { "" }
 
+Write-Log "Configuring privacy settings"
+
+try {
+    $dataCollectionPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+    if (-not (Test-Path $dataCollectionPath)) {
+        New-Item -Path $dataCollectionPath -Force | Out-Null
+    }
+    Set-ItemProperty -Path $dataCollectionPath -Name "AllowTelemetry" -Value 0 -Type DWord -Force
+    Write-Log "Telemetry disabled"
+} catch {
+    Write-Log "Failed to disable telemetry: $($_.Exception.Message)" "WARN"
+}
+
+try {
+    $cortanaPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
+    if (-not (Test-Path $cortanaPath)) {
+        New-Item -Path $cortanaPath -Force | Out-Null
+    }
+    Set-ItemProperty -Path $cortanaPath -Name "AllowCortana" -Value 0 -Type DWord -Force
+    Write-Log "Cortana disabled"
+} catch {
+    Write-Log "Failed to disable Cortana: $($_.Exception.Message)" "WARN"
+}
+
+try {
+    $advertisingPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
+    if (-not (Test-Path $advertisingPath)) {
+        New-Item -Path $advertisingPath -Force | Out-Null
+    }
+    Set-ItemProperty -Path $advertisingPath -Name "DisabledByGroupPolicy" -Value 1 -Type DWord -Force
+    Write-Log "Advertising ID disabled"
+} catch {
+    Write-Log "Failed to disable advertising ID: $($_.Exception.Message)" "WARN"
+}
+
+try {
+    $wifiSensePath = "HKLM:\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting"
+    if (Test-Path $wifiSensePath) {
+        Set-ItemProperty -Path $wifiSensePath -Name "value" -Value 0 -Type DWord -Force
+        Write-Log "Wi-Fi hotspot reporting disabled"
+    }
+} catch {
+    Write-Log "Failed to disable Wi-Fi hotspot reporting: $($_.Exception.Message)" "WARN"
+}
+
 if ($hostname -ne "") {
     Write-Log "Setting computer name to $hostname"
     try {
