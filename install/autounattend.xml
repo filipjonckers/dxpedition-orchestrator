@@ -118,18 +118,18 @@
         <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
             <UserAccounts>
                 <AdministratorPassword>
-                    <Value>dxp3dition!</Value>
+                    <Value>dx</Value>
                     <PlainText>true</PlainText>
                 </AdministratorPassword>
                 <LocalAccounts>
                     <LocalAccount wcm:action="add">
                         <Password>
-                            <Value>dxp3dition!</Value>
+                            <Value>dx</Value>
                             <PlainText>true</PlainText>
                         </Password>
                         <Group>Administrators</Group>
-                        <DisplayName>dxpedition</DisplayName>
-                        <Name>dxpedition</Name>
+                        <DisplayName>dx</DisplayName>
+                        <Name>dx</Name>
                         <Description>DXpedition local administrator</Description>
                     </LocalAccount>
                 </LocalAccounts>
@@ -137,9 +137,9 @@
             <AutoLogon>
                 <Enabled>true</Enabled>
                 <LogonCount>999</LogonCount>
-                <Username>dxpedition</Username>
+                <Username>dx</Username>
                 <Password>
-                    <Value>dxp3dition!</Value>
+                    <Value>dx</Value>
                     <PlainText>true</PlainText>
                 </Password>
             </AutoLogon>
