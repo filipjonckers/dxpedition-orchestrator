@@ -136,7 +136,8 @@ Initially this includes:
 - Secondary keyboard: US International
 - Language selector visible in the taskbar.
 - Privacy: telemetry off, Cortana disabled, advertising ID off
-- Explorer settings should be configurable.
+- Explorer: always show file name extensions
+- Microsoft Store icon removed from taskbar
 
 Additional settings may be added later.
 

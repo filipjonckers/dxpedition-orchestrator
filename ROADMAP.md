@@ -123,6 +123,8 @@ Tasks:
     - US International secondary
 [x] Apply performance settings
 [x] Disable telemetry, Cortana, advertising ID
+[x] Show file name extensions in Explorer
+[x] Remove Microsoft Store icon from taskbar
 
 Result:
 

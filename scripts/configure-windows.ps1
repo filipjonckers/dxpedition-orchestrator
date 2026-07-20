@@ -148,4 +148,28 @@ try {
     Write-Log "Failed to apply performance settings: $($_.Exception.Message)" "WARN"
 }
 
+Write-Log "Configuring Explorer settings"
+
+try {
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Value 0 -Type DWord -Force
+    Write-Log "File name extensions set to always show"
+} catch {
+    Write-Log "Failed to set file name extensions: $($_.Exception.Message)" "WARN"
+}
+
+try {
+    $taskbarShell = New-Object -ComObject Shell.Application
+    $taskbarItems = $taskbarShell.Namespace("shell:::{4234d49b-0245-4df3-b780-3893943456e1}").Items()
+    $storeItem = $taskbarItems | Where-Object { $_.Name -eq "Microsoft Store" }
+    if ($storeItem) {
+        $unpinVerb = $storeItem.Verbs() | Where-Object { $_.Name -eq "Unpin from taskbar" }
+        if ($unpinVerb) {
+            $unpinVerb.DoIt()
+            Write-Log "Microsoft Store icon removed from taskbar"
+        }
+    }
+} catch {
+    Write-Log "Failed to remove Microsoft Store from taskbar: $($_.Exception.Message)" "WARN"
+}
+
 Write-Log "Windows configuration phase completed"
